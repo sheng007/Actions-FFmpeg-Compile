@@ -40,23 +40,17 @@ cat <<EOF >"$BUILD_SCRIPT"
     git config user.name "Builder"
 
     # 加载 ffmpeg 补丁
-    PATCHES=('/patches/$GIT_BRANCH/*.patch')
-    if [[ "\${#PATCHES[@]}" = 0 ]]; then
-        echo 'No patches found for $GIT_BRANCH'
-    fi
-    for patch in "\${PATCHES[@]}"; do
-        echo "Applying \$patch"
-        git apply "\$patch"
+    PATCHES="patches/${GIT_BRANCH}/*.patch"
+    for patch in ${PATCHES}; do
+        echo "Applying $patch"
+        git apply $patch
     done
-
-    # # 加载 ffmpeg 补丁(*.sh)
-    SCRIPTS=('/patches/$GIT_BRANCH/*.sh')
-    if [[ "\${#SCRIPTS[@]}" = 0 ]]; then
-        echo 'No scripts found for $GIT_BRANCH'
-    fi
-    for scripts in "\${SCRIPTS[@]}"; do
-        echo "Call Scripts : \$scripts"
-        source "\$scripts"
+    
+    # 加载 ffmpeg 补丁(*.sh)
+    SCRIPTS="patches/${GIT_BRANCH}/*.sh"
+    for scripts in ${SCRIPTS}; do
+        echo "Patch Scripts : $scripts"
+        source $scripts
     done
 
     ./configure --prefix=/ffbuild/prefix --pkg-config-flags="--static" \$FFBUILD_TARGET_FLAGS \$FF_CONFIGURE \
