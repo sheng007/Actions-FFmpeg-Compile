@@ -39,7 +39,8 @@ cat <<EOF >"$BUILD_SCRIPT"
     git config user.email "builder@localhost"
     git config user.name "Builder"
 
-    PATCHES=('/patches/$GIT_BRANCH'/*.patch)
+    # 加载 ffmpeg 补丁
+    PATCHES=('/patches/$GIT_BRANCH/*.patch')
     if [[ "\${#PATCHES[@]}" = 0 ]]; then
         echo 'No patches found for $GIT_BRANCH'
     fi
@@ -48,8 +49,8 @@ cat <<EOF >"$BUILD_SCRIPT"
         git apply "\$patch"
     done
 
-    # patches: 新增脚本(*.sh)补丁
-    SCRIPTS=('/patches/$GIT_BRANCH'/*.sh)
+    # # 加载 ffmpeg 补丁(*.sh)
+    SCRIPTS=('/patches/$GIT_BRANCH/*.sh')
     if [[ "\${#SCRIPTS[@]}" = 0 ]]; then
         echo 'No scripts found for $GIT_BRANCH'
     fi
