@@ -48,6 +48,16 @@ cat <<EOF >"$BUILD_SCRIPT"
         git apply "\$patch"
     done
 
+    # 新增脚本(*.sh)补丁
+    SCRIPTS=('/patches/$GIT_BRANCH'/*.sh)
+    if [[ "\${#SCRIPTS[@]}" = 0 ]]; then
+        echo 'No scripts found for $GIT_BRANCH'
+    fi
+    for scripts in "\${SCRIPTS[@]}"; do
+        echo "Call Scripts : \$scripts"
+        source "\$scripts"
+    done
+
     ./configure --prefix=/ffbuild/prefix --pkg-config-flags="--static" \$FFBUILD_TARGET_FLAGS \$FF_CONFIGURE \
         --extra-cflags="\$FF_CFLAGS" --extra-cxxflags="\$FF_CXXFLAGS" --extra-libs="\$FF_LIBS" \
         --extra-ldflags="\$FF_LDFLAGS" --extra-ldexeflags="\$FF_LDEXEFLAGS" \
